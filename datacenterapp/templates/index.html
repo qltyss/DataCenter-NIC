@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <title>Dashboard</title>
+   
+    <!--bootstrap CSS-->
+    <link rel="stylesheet" href="../static/css/bootstrap-css/bootstrap.min.css">
+
+     <!--CSS-->
+     <link href="/static/css/stylee.css" rel="stylesheet">
+     <link href="/static/css/modal.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <img src='/static/img/qss/1.png' alt="" class='qssLogo'/>
+      <!-- <img src='/static/img/nic/nic.png' alt="" class='nicLogo'/> -->
+    </div>
+</nav>
+
+ <div class=" container-fluid this">
+   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 modal" id="redModal" style="display: none;">
+     <div class="modal-content " id="redModalContent">
+       <div class=" text-start px-5 ">
+         <p class="found px-4 ">Issue Found !!</p>
+       </div>
+
+       <div class=" px-5">
+         <p class="issue text-start px-5">Issue found on HDD Serial number:  <span class="code">WX11DC9H2S8V</span></p>
+         <p class="issue text-start px-5">The swapping process is starting </p>
+       </div>
+
+       <div class="flex-parent jc-center  text-center pt-3">
+         <button type="button" class=" confirm py-1 text-start px-5 mx-2" data-bs-toggle="modal" data-bs-target="#scanModal" id="Confirm">
+           Confirm
+         </button>
+         <button type="button" class=" Cancel py-1 text-start px-5 mx-2" data-bs-toggle="modal" data-bs-target="#scanModal" id="Cancel">
+            Cancel
+         </button> 
+       </div>
+
+       
+     </div>
+   </div>
+
+   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 modal" id="fireModal" style="display: none;">
+     <div class="modal-content " id="fireModalContent">
+       <div class="container fire ">
+         <div class="row my-3">
+           <div class="colxl-5 col-lg-5 col-md-12 col-sm-12  text-center">
+                 <img src='/static/img/nic/fire.png' alt="" class='fire-img' id="fire-img-modal"/>
+           </div>
+
+           <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 text-start">
+             <div class="row ">
+               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
+                 <p class="fire-identified">Fire Alert !!</p>
+               </div>
+             </div>
+
+             <div class="row">
+               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                 <p class="fire-area">Fire detected in area:  <span class="fire-area-1">AL3 </span></p>
+
+               </div>
+             </div>
+
+             <div class="row mt-4">
+               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
+                 <button type="button" class=" fire-confirm" data-bs-toggle="" data-bs-target="#" id="fire-confirm">
+                   Confirm
+               </button>
+
+               <button type="button" class=" fire-Cancel" data-bs-toggle="" data-bs-target="#" id="fire-fake">
+                 Fake Alert
+            </button> 
+               </div>
+             </div>
+
+           </div>
+         </div>
+       </div>
+     </div>
+  </div>
+
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 modal" id="faceModal" style="display: none;">
+   <div class="modal-content " id="faceModalContent">
+     <div class="container-fluid face-rgc py-1 pb-3">
+       <div class="row">
+         <div class="colxl-4 col-lg-4 col-md-4 col-sm-12 text-center">
+           <img src='/static/img/nic/face.png' alt="" class='face-img-dash1' id="face-img-modal"/>
+         </div>
+
+         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 text-start">
+             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+               <p class="face-identified">Face Recognition</p>
+             </div>
+
+             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pb-2">
+               <p  id="face-name" class="faceName">Name</p>
+               <p  id ="black-white" class="blackWhite">Black / White</p> 
+             </div>
+
+             <div class="row">
+               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 text-start">
+                 <button type="button" class=" face-confirm  text-center " data-bs-toggle="" data-bs-target="#" id="face-confirm">
+                   Confirm
+                 </button>
+               </div>
+               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 text-center">
+                 <button type="button" class=" face-Cancel  text-center " data-bs-toggle="" data-bs-target="#" id="face-fake">
+                   False Alert
+                </button> 
+               </div>
+             </div>
+             
+         </div>
+       </div>
+     </div>
+   </div>
+</div>
+
+ <div class="row">
+   <!-- the first half (Strams) -->
+   <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
+     <div class="row">
+       <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 box">
+         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
+           <p class="title pt-1 ">Inspection Stream</p>
+         </div>
+
+         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 stream-box">
+           <img src="/video_feed_html/" class="stream " />
+         </div>
+       </div>
+
+       <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 box">
+         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
+           <p class="title pt-1 ">3D Stream</p>
+         </div>
+
+         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 stream-box">
+           <img src="/video_feed_depth/" class="stream " />
+         </div>
+       </div>
+    </div>
+   </div>
+
+   <!-- the second half  () -->
+   <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
+     <div class="row py-2">
+       <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 ">
+         <div class="row">
+           <div class="container tempe-container text-start py-1">
+             <p class="temp-num"> <span><img src='/static/img/nic/temperature.png' alt="tempe" class="tempe"/></span> 19°C </p>
+          </div>
+         </div>
+       </div>
+
+       <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6  text-end">
+         <!-- Button trigger modal -->
+         <div class="row">
+           <button type="button" id="scan-btn" class="scan-btn py-1" data-bs-toggle="modal" data-bs-target="#scanModal">
+             SCAN
+         </button>
+         </div>
+
+       <!-- Custom Modal -->
+       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 modal" id="gameModal" style="display: none;">
+           <div class="modal-content" id="modalContent">
+               <div class=" text-center py-1">
+                   <p class="cabinet-code">Enter Cabinet Code</p>
+               </div>
+       
+               <div class="d-flex justify-content-center mb-3">
+                   <input class="form-control text-center" type="text" placeholder="000" aria-label="Cabinet Code" id="cabinetCodeInput">
+               </div>
+
+               <div class="errorMessage text-center" id="errorMessage"></div>
+
+       
+               <div class="d-flex justify-content-center">
+                   <button type="button" class=" scan-btn-1 py-1" data-bs-toggle="modal" data-bs-target="#scanModal" id="scanButton">
+                       SCAN
+                   </button>
+               </div>
+           </div>
+        </div>  
+        
+       </div>
+     </div>
+
+     <div class="row">
+       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 box notification">
+           <p class="title pt-1">Notification Panel</p>
+           
+           <div  id="notificationContainer" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 notification-data">
+               <div class="container">
+                   <div class="row ">
+                     <div class="col-1 text-center pb-1">
+                       <img src="/static/img/nic/bell1.png" alt=""  class="bell1">
+                     </div>
+                     <div class="col-8  ">
+                       <p class="note " >AMR is in the initial area</p> 
+                      
+                     </div>
+                     <div class="col-3 date text-center ">
+                       8/1/2024 11:05:54 AM 
+                     </div>
+                     <p class="line"></p>
+                   </div>
+                 </div>
+           </div>
+       </div>
+ </div>
+
+
+
+   <div class="row">
+     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  box cabinet" id="cabinetContent"> 
+       <p class="title pt-1">Details Panel</p>
+       <div class="div cabinet1">
+         <p>Empty</p>
+       </div>
+     </div>
+
+     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 ">
+       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+         <div class="row">
+         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 box box-arm"> 
+             <p class="title pt-1">ARM Controller</p>
+             <div class="div box-amr1 ">
+               <div class="row">
+                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 first-row-but">
+                   <div class="row">
+                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 text-center text-center">
+                       <button type="button" class="image-button" id="runScriptArm">
+                           <img src="/static/img/nic/run.png" alt="" class="btn-s-i">
+                           <p class="but-title">RunScript</p>
+                       </button>
+                   </div>
+
+                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 text-center">
+                       <button type="button" class="image-button" id="StopScriptArm" >
+                         <img src="/static/img/nic/stop.png" alt="" class="btn-s-i">
+                         <p class="but-title">StopScript</p>
+                       </button>
+                     </div> 
+
+                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 text-center">
+                       <button type="button" class="image-button" id="emergencyStopArm" >
+                         <img src="/static/img/nic/emergency.png" alt="" class="btn-s-i">
+                         <p class="but-title">EmergencyStop</p>
+                       </button>
+                     </div> 
+                         
+                   </div>
+                 </div>
+
+                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                   <div class="row">
+                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 text-center">
+                       <button type="button" class="image-button" id="enableRobotArm" >
+                         <img src="/static/img/nic/enable.png" alt="" class="btn-s-i">
+                         <p class="but-title">EnableRobot</p>
+                       </button>
+                     </div> 
+
+                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 text-center">
+                       <button type="button" class="image-button" id="disableRobotArm" >
+                         <img src="/static/img/nic/disable.png" alt="" class="btn-s-i">
+                         <p class="but-title">DisableRobot</p>
+                       </button>
+                     </div>   
+                   </div>
+                 </div>
+
+               </div>
+             </div>
+         </div>
+
+
+       
+         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 box box-amr " > 
+           <p class="title pt-1">AMR Controller</p>
+           <div class="div box-arm1">
+               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                 <div class="row ">
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 text-center">
+                     <button type="button" class="image-button" id="runScriptAmr">
+                         <img src="/static/img/nic/run.png" alt="" class="btn-s-i">
+                         <p class="but-title">RunScript</p>
+                     </button>
+                 </div> 
+
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 text-center ">
+                     <button type="button" class="image-button" id="stopScriptAmr" >
+                       <img src="/static/img/nic/stop.png" alt="" class="btn-s-i">
+                       <p class="but-title">StopScript</p>
+                     </button>
+                   </div> 
+
+                   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 text-center ">
+                     <button type="button" class="image-button" id="emergencyStopAmr" >
+                       <img src="/static/img/nic/emergency.png" alt="" class="btn-s-i">
+                       <p class="but-title">EmergencyStop</p>
+                     </button>
+                   </div> 
+                       
+                 </div>
+               </div>
+
+                   
+               </div>
+
+           </div>
+
+           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+             <div class="row">
+               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  box chart">
+                     <div class="col-12 text-center ">
+                       <img src='/static/img/nic/fire.png' alt="" class='fire-img-dash' id="fire-img-id"/>
+                     </div>
+
+                     <div class="col-12 text-center ">
+                       <p class="fire-detection">Fire Detection</p>
+                     </div>
+
+                     <div class="col-12 text-center ">
+                       <p class="firearea">Fire detected in area:</p>
+                       <p class="black-white" id="firearea1">..</p>
+                     </div>
+                   </div>
+
+                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  box chart">
+                   <div class="col-12 text-center ">
+                     <img src='/static/img/nic/face.png' alt="" class='fire-img-dash' id="face-img"/>
+                   </div>
+
+                   <div class="col-12 text-center ">
+                     <p class="face-recognition" id="face-recognition">Face Recognition</p>
+                   </div>
+
+                   <div class="col-12 text-center ">
+                     <p class="black-white" id="Status">Black / White</p>
+                     <p class="black-white"  id="theName">..</p>
+                   </div>
+                 </div>
+               </div>     
+           </div>  
+
+               </div>     
+       </div> 
+      </div>
+
+     </div>
+   </div>
+ </div>
+</div>
+
+
+<!-- bootstrap js and  jquery-->
+<script src="/static/js/bootstrap-js/bootstrap.bundle.min.js"></script>
+<!-- Include jQuery -->
+<script src="/static/js/jquery.min.js"></script>
+<!-- MY JS FILES -->
+<script src="/static/js/api-back.js"></script>
+<script src="/static/js/arm-amr-but.js"></script>
+
+</body>
+</html>
