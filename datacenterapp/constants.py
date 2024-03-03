@@ -19,7 +19,7 @@ red = 0
 start_timer = None
 condition_met = False
 fire_alert = ''
-
+PATH_TO_JOIN = 'datacenterapp/static/mydetect'
 detected_labels = []
 new_list = []
 person_positions = []
@@ -31,11 +31,11 @@ image_counter = 0
 image_name = ''
 fire_image_saved = False  # Initialize the flag
 fire_detection_start = None  # To track when fire is first detected
-
-
-# API Links
-# init_url = 'http://localhost:3005/initialize'
 # API URL for the recognition endpoint
-recog_url = 'http://192.168.100.20:3005/face_recognition'
+recog_url = 'http://192.168.100.64:3005/face_recognition'
 
 frame_counter = 0  # Initialize the frame counter
+
+# Arm 
+ip = "192.168.100.243"
+port = 6001

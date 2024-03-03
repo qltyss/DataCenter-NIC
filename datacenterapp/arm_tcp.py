@@ -1,9 +1,6 @@
 import socket
-
-# ip = "192.168.100.243"
-# port = 6001
-ip = "192.168.100.219"
-port = 5555
+from .constants import * 
+from time import sleep
 def arm(command):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -16,16 +13,17 @@ def arm(command):
     except socket.error as e:
         print(f"Error: {e}")
         return "Not Connected"  # Return "Not Connected" if any socket error occurs
-# arm("unlock")
-# send("HR2")
-# send("LM3")
-# send_command("A")
-# send_command("B")
-# # Loop to continuously get input and send it
-# while True:
-#     Grip = input("Enter the grip value (or type 'exit' to quit): ").upper()
+
+def control_arm(command):
+    print("here")
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((ip, 29999))
+            sleep(1)
+            s.sendall(command.encode())
+            return 'Started'
+    except socket.error as e:
+        # logging.error(f"Socket error: {e}")
+        
+        return "Not Connected"
     
-#     if Grip == 'EXIT':
-#         break
-    
-#     send_command(Grip)

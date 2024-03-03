@@ -197,10 +197,13 @@ document.addEventListener('DOMContentLoaded', () =>{
         });
         return response
     }
-    
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
     // Event listener for the 'Confirm swapping' button
     confirmButton.addEventListener('click', function() {
         performSwapAction("swap").then(() => {
+        sleep(2000);
         addNotification("The swapping has been confirmed.");
         closeModal('redModal');
 

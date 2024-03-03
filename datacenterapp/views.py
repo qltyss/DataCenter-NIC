@@ -1,29 +1,22 @@
 import cv2
 from django.http import StreamingHttpResponse, JsonResponse
 from django.shortcuts import render
-# from .tcp import tcp_handler
-# from .videostream import global_video_stream
+
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators import gzip
 import time
 from .amr import amr_command
 # from .amr_test import amr_test
 import json
-from .arm_tcp import arm
+from .arm_tcp import arm, control_arm
 from .constants import *
 from .load_models import fire_model, cabinet_model
-# from .facial_recognition import *
 from .image_base64 import image_to_base64
 import requests
-import numpy as np
-# import pyrealsense2 as rs
-
 import os
 from .depth_cam import camera_stream
 
-# cabinet_model, fire_model= load()
-# Constants
-PATH_TO_JOIN = 'datacenterapp/static/mydetect'
+
 def save_image(frame):
     global image_counter
     current_time_str = time.strftime("%Y%m%d_%H%M%S")
@@ -42,19 +35,18 @@ def start_scanning(request):
         value = body.get('dataItem')  
         
         notification_value = 'AMR is moving to A20 area'
-        # amr_test(value)
+        time.sleep(0.5)
         notification_value = 'AMR is in A20 area'
-        # time.sleep(1)
+        
         if value == "scan":
+            time.sleep(1)
             notification_value = 'Scanning process has begun'
-            response = arm('unlock')
-            notification_value = 'An issue has been detected'
-            # amr_command("LM9")
-            # print(value)  # This will print the list to the console
+            print(value)  # This will print the list to the console
             
-            # response = arm('unlock')
-            # print(response) # now it's 0
-
+            response = arm('scan')
+            print(response) # now it's 0
+            
+            notification_value = 'An issue has been detected'
         
         return JsonResponse({'message': "message"})
 
@@ -65,25 +57,26 @@ def start_swapping(request):
     if request.method == 'POST':
         # Parse the JSON data from the request body
         body = json.loads(request.body)
-        value = body.get('dataItem')  
+        value = body.get('dataItem') 
+        response = value 
         if value == "swap":
             notification_value = 'Swapping process has begun'
-            response = arm('value')
+            print(value)  
+            amr_new = arm(value) # Value should be swap always
+            print(amr_new) # now it's 1
+            time.sleep(2)
+            response = "swapped"
+            if amr_new == "swapped":
+                response = "swapped"
             notification_value = 'Swapping process is finished'
-            # print(value)  
-            # amr_new = arm(value) # Value should be swap always
-            # print(amr_new) # now it's 1
-            # if amr_new == "swapped":
-            #     amr_command("LM10")
-            #     response = "swapped"
+            
         elif value == "cancel":
+            response = ""
             notification_value = 'Swapping process was canceled'
-            response = arm('value')
-            # print("cancellllllllllllllllllllllll")
+            time.sleep(0.5)
             notification_value = 'AMR is moving to A50 area'
-            # amr_command("LM10")
+            time.sleep(0.5)
             notification_value = 'AMR is in A50 area'
-            # response = 'swapped'
             
         return JsonResponse({'message': "message"})
     
@@ -95,8 +88,8 @@ def faical_recog(request):
         # Parse the JSON data from the request body
         body = json.loads(request.body)
         value = body.get('dataItem')  
-
-        response = '5' # should be "facial"
+        print(value)
+        response = 'facial' # should be "facial"
         
         return JsonResponse({'message': "message"})  
 @csrf_exempt
@@ -152,7 +145,7 @@ def video_feed_html(request):
             # frame = camera_stream.read_color()
             frame = camera_stream.read_color()
             # if response == "unlocked": # To be changed to "unlocked" 
-            if response == "0": # To be changed to "unlocked" 
+            if response == "scanned": # To be changed to "unlocked" 
                 if cabinet_model !=  None:
                     results = cabinet_model(frame, conf = 0.50) # Detect Red and Green Lights
                     for r in results:
@@ -194,22 +187,20 @@ def video_feed_html(request):
             elif red_counter == 0 and green_counter == 0:
                 detected_objects = {"red": 0, "green": 0}
             
-            if response == "1": # To be changed to "swapped" 
+            if response == "swapped": # To be changed to "swapped" 
             # if response == "swapped": # To be changed to "swapped" 
                 if fire_model is not None:
                     results = fire_model(frame, conf = 0.50, classes = [1]) # Detect Red and Green Lights
-                    fire_currently_detected = False  # Flag to check if fire is currently detected
                     for r in results:
                         boxes = r.boxes
                         for box in boxes:
                             confidence = box.conf.item()
                             class_id = r.names[box.cls[0].item()]
                             if class_id == "fire":
-                                fire_currently_detected = True
+                                
                                 if fire_detection_start is None:
                                     fire_detection_start = time.time()  # Record the start time of fire detection
 
-                                elapsed_time = time.time() - fire_detection_start
                                 fire_alert = "fire"
                                 # if elapsed_time >= 1.0 and not fire_image_saved:  # Check if fire has been detected for at least 1 second
                                     
@@ -222,7 +213,7 @@ def video_feed_html(request):
                 else:
                     pass          
             # if frame_counter % 15 == 0:
-            if response == "5": # To be changed to "facial"
+            if response == "facial": # To be changed to "facial"
                     
                     # # Face Recognition
                     image_data = image_to_base64(frame)
@@ -265,34 +256,25 @@ def fire(request):
     return JsonResponse({'fire': fire_alert, 'face' : black_white, 'path' : image_name})
 
 
-# def armController(request):
-#     if request.method == 'POST' and request.is_ajax():
-#         action = request.POST.get('action')
-        
-#         if action == 'runScriptAmr':
-#             # Perform the action you want here
-#             print("Received runScriptAmr signal")
-            
-#             # You can return a JsonResponse if needed
-#             return JsonResponse({'message': 'Action successful'}, status=200)
-
-#     # Handle other cases or return an error
-#     return JsonResponse({'error': 'Invalid request'}, status=400)
-
 def armController(request):
     if request.method == 'POST':
         data = request.POST.get('command')
-        # print(data)
+        print(data)
+        
         if data == "runScriptArm":
-            print(data)
+            control_arm("RunScript(NIC_Leap)")
+
         elif data == "StopScriptArm":
-            print(data)
+            control_arm("StopScript(NIC_Leap)")
+
         elif data == "emergencyStopArm":
-            print(data)
+            control_arm("EmergencyStop()")
+
         elif data == "enableRobotArm":
-            print(data)
+            control_arm("EnableRobot()")
+
         elif data == "disableRobotArm":
-            print(data)
+            control_arm("DisableRobot()")
 
         # You can perform additional actions with the received data here
         return JsonResponse({'status': 'success'})
